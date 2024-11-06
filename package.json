@@ -1,0 +1,28 @@
+{
+  "name": "awwwards-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "eslint": "9.14.0",
+    "eslint-config-next": "15.0.2",
+    "framer-motion": "^11.11.11",
+    "gsap": "^3.12.5",
+    "locomotive-scroll": "^5.0.0-beta.8",
+    "next": "^15.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.6",
+    "@types/react": "^18.3.12",
+    "sass": "^1.80.6",
+    "sass-loader": "^16.0.3",
+    "typescript": "^5.6.3"
+  }
+}

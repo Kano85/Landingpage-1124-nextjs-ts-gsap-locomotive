@@ -1,8 +1,6 @@
-//src/components/SlidingImages/index.jsx
+'use client';
 
-'use client'; // Ensure this is the first line to mark the component as a Client Component
-
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import styles from './style.module.scss';
 import Image from 'next/image';
@@ -12,6 +10,9 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 import { slideUp } from './animation';
+
+// Register ScrollTrigger plugin at the top level
+gsap.registerPlugin(ScrollTrigger);
 
 const slider1 = [
   { color: '#e3e5e7', src: 'c2.jpg' },
@@ -39,11 +40,6 @@ export default function SlidingImages() {
   const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
   const height = useTransform(scrollYProgress, [0, 0.9], [50, 0]);
-
-  // Register ScrollTrigger plugin inside useEffect
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-  }, []);
 
   // Initialize GSAP animations using the useGSAP hook
   useGSAP(
@@ -83,7 +79,7 @@ export default function SlidingImages() {
       animate();
     },
     { scope: containerRef }
-  ); // Define the scope for selector text
+  );
 
   return (
     <motion.main
@@ -94,7 +90,12 @@ export default function SlidingImages() {
       className={styles.landing}
       ref={containerRef}
     >
-      <Image src="/images/background.jpg" fill={true} alt="background" />
+      <Image
+        src="/images/background.jpg"
+        fill={true}
+        alt="background"
+        priority
+      />
       <div className={styles.sliderContainer}>
         <motion.div
           style={{ x: x1 }}
@@ -104,7 +105,7 @@ export default function SlidingImages() {
           {slider1.map((project, index) => (
             <div
               key={index}
-              className="project" // Use className="project" for GSAP selector
+              className="project"
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -126,7 +127,7 @@ export default function SlidingImages() {
           {slider2.map((project, index) => (
             <div
               key={index}
-              className="project" // Use className="project" for GSAP selector
+              className="project"
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>

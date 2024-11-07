@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './style.module.scss';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
@@ -13,21 +13,14 @@ import Rounded from '../../common/RoundedButton';
 import Magnetic from '../../common/Magnetic';
 import { useGSAP } from '@gsap/react';
 
-// Remove the duplicate import and invalid useEffect call
-// import { useEffect } from 'react';
-
-// Move useEffect inside the component
+// Register ScrollTrigger plugin at the top level
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Header() {
   const headerRef = useRef(null);
   const buttonRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
-
-  // Register ScrollTrigger plugin inside useEffect
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-  }, []);
 
   // Close the navigation menu when the pathname changes
   useEffect(() => {

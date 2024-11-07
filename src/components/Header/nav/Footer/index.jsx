@@ -1,12 +1,14 @@
+//src/components/Header/nav/Footer/index.jsx
+
 import styles from './style.module.scss';
 
-export default function index() {
+export default function Footer() {
   return (
     <div className={styles.footer}>
-        <a>Awwwards</a>
-        <a>Instagram</a>
-        <a>Dribble</a>
-        <a>LinkedIn</a>
+      <a>Awwwards</a>
+      <a>Instagram</a>
+      <a>Dribble</a>
+      <a>LinkedIn</a>
     </div>
-  )
+  );
 }

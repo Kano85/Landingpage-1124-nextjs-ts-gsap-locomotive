@@ -1,9 +1,8 @@
 // src/components/Landing/index.jsx
-// src/components/Landing/index.jsx
 
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import styles from './style.module.scss';
 import { useScroll, useTransform, motion } from 'framer-motion';
@@ -13,6 +12,9 @@ import { useGSAP } from '@gsap/react';
 
 import { slideUp } from './animation';
 
+// Register ScrollTrigger plugin at the top level
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Landing() {
   const firstTextRef = useRef(null);
   const secondTextRef = useRef(null);
@@ -21,11 +23,6 @@ export default function Landing() {
 
   const xPercent = useRef(0);
   const direction = useRef(-1);
-
-  // Register ScrollTrigger plugin inside useEffect
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-  }, []);
 
   // Initialize GSAP animations using the useGSAP hook
   useGSAP(
@@ -80,7 +77,12 @@ export default function Landing() {
       className={styles.landing}
       ref={containerRef}
     >
-      <Image src="/images/background.jpg" fill={true} alt="background" />
+      <Image
+        src="/images/background.jpg"
+        fill={true}
+        alt="background"
+        priority
+      />
       <div className={styles.sliderContainer}>
         <div ref={sliderRef} className={styles.slider}>
           <p ref={firstTextRef}>Freelance Developer -</p>

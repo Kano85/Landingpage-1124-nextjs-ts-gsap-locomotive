@@ -28,7 +28,7 @@ export default function Contact() {
                 alt={'image'}
                 src={`/images/background.jpg`}
                 priority={true}
-                style={{ width: '100%', height: 'auto' }} // Optional: Improve loading performance
+                sizes="100vw" // Optional: Improve loading performance
               />
             </div>
             <h2>Let&apos;s work</h2>

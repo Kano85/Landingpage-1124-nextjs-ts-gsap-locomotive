@@ -151,7 +151,7 @@ export default function Home() {
                   <Image
                     src={`/images/${src}`}
                     width={300}
-                    height={0}
+                    height={200}
                     alt="image"
                   />
                 </div>

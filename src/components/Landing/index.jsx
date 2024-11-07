@@ -82,6 +82,7 @@ export default function Landing() {
         fill={true}
         alt="background"
         priority
+        sizes="100vw"
       />
       <div className={styles.sliderContainer}>
         <div ref={sliderRef} className={styles.slider}>

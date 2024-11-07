@@ -95,6 +95,7 @@ export default function SlidingImages() {
         fill={true}
         alt="background"
         priority
+        sizes="100vw"
       />
       <div className={styles.sliderContainer}>
         <motion.div
@@ -114,6 +115,7 @@ export default function SlidingImages() {
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
                   priority={false}
+                  sizes="100vw"
                 />
               </div>
             </div>
@@ -136,6 +138,7 @@ export default function SlidingImages() {
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
                   priority={false}
+                  sizes="100vw"
                 />
               </div>
             </div>

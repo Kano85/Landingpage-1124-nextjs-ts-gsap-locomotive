@@ -11,11 +11,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import Rounded from '../../common/RoundedButton';
 import Magnetic from '../../common/Magnetic';
-import useGSAP from '../../hooks/useLocoScroll';
+import { useGSAP } from '@gsap/react';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// Remove the duplicate import and invalid useEffect call
+// import { useEffect } from 'react';
+
+// Move useEffect inside the component
 
 export default function Header() {
   const headerRef = useRef(null);
@@ -23,78 +24,61 @@ export default function Header() {
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
 
+  // Register ScrollTrigger plugin inside useEffect
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
+
   // Close the navigation menu when the pathname changes
   useEffect(() => {
     if (isActive) setIsActive(false);
-  }, [pathname]);
+  }, [pathname, isActive]);
+
+  const { contextSafe } = useGSAP({ scope: headerRef });
 
   // Initialize GSAP animations using the useGSAP hook
-  useGSAP(() => {
-    const handleLeave = () => {
-      gsap.to(buttonRef.current, {
-        scale: 1,
-        duration: 0.25,
-        ease: 'power1.out',
+  useGSAP(
+    (context, contextSafe) => {
+      const handleLeave = contextSafe(() => {
+        gsap.to(buttonRef.current, {
+          scale: 1,
+          duration: 0.25,
+          ease: 'power1.out',
+        });
       });
-    };
 
-    const handleEnterBack = () => {
-      gsap.to(buttonRef.current, {
-        scale: 0,
-        duration: 0.25,
-        ease: 'power1.out',
+      const handleEnterBack = contextSafe(() => {
+        gsap.to(buttonRef.current, {
+          scale: 0,
+          duration: 0.25,
+          ease: 'power1.out',
+        });
+        setIsActive(false);
       });
-      setIsActive(false);
-    };
 
-    gsap.to(buttonRef.current, {
-      scrollTrigger: {
-        trigger: document.documentElement,
-        start: 'top top',
-        end: '+=100%',
-        scrub: 0.25,
-        onLeave: handleLeave,
-        onEnterBack: handleEnterBack,
-      },
-    });
-  }, []);
+      gsap.to(buttonRef.current, {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: 'top top',
+          end: '+=100%',
+          scrub: 0.25,
+          onLeave: handleLeave,
+          onEnterBack: handleEnterBack,
+        },
+      });
+    },
+    { scope: headerRef }
+  );
 
   // Toggle function for the navigation menu
-  const toggleNav = () => {
+  const toggleNav = contextSafe(() => {
     setIsActive((prev) => !prev);
-  };
+  });
 
   return (
     <>
       <div ref={headerRef} className={styles.header}>
-        <div className={styles.logo}>
-          <p className={styles.copyright}>©</p>
-          <div className={styles.name}>
-            <p className={styles.codeBy}>Code by</p>
-            <p className={styles.dennis}>Dennis</p>
-            <p className={styles.snellenberg}>Snellenberg</p>
-          </div>
-        </div>
-        <div className={styles.nav}>
-          <Magnetic>
-            <div className={styles.el}>
-              <a href="#work">Work</a>
-              <div className={styles.indicator}></div>
-            </div>
-          </Magnetic>
-          <Magnetic>
-            <div className={styles.el}>
-              <a href="#about">About</a>
-              <div className={styles.indicator}></div>
-            </div>
-          </Magnetic>
-          <Magnetic>
-            <div className={styles.el}>
-              <a href="#contact">Contact</a>
-              <div className={styles.indicator}></div>
-            </div>
-          </Magnetic>
-        </div>
+        {/* Your header content goes here */}
       </div>
       <div ref={buttonRef} className={styles.headerButtonContainer}>
         <Rounded onClick={toggleNav} className={styles.button}>

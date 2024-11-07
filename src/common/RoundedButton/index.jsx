@@ -1,32 +1,35 @@
-// src/common/RoundedButton/index.jsx
-
 'use client';
 
 import React, { useRef } from 'react';
 import { gsap } from 'gsap';
-import useGSAP from '../../hooks/useLocoScroll';
+import { useGSAP } from '@gsap/react';
 
 export default function RoundedButton({ children, onClick, className }) {
   const buttonRef = useRef(null);
   const timeline = useRef(null);
 
-  useGSAP(() => {
-    // Initialize GSAP timeline
+  const { contextSafe } = useGSAP({ scope: buttonRef });
+
+  // Initialize GSAP timeline inside contextSafe()
+  const initializeTimeline = contextSafe(() => {
     timeline.current = gsap
       .timeline({ paused: true })
       .to(buttonRef.current, { rotation: 90, duration: 0.3 })
       .to(buttonRef.current, { rotation: 0, duration: 0.3 });
+  });
+
+  // Initialize timeline when component mounts
+  React.useEffect(() => {
+    initializeTimeline();
   }, []);
 
-  // Define the click handler
-  const handleClick = () => {
-    // Play the timeline and reverse it after completion
+  // Wrap click handler with contextSafe()
+  const handleClick = contextSafe(() => {
     timeline.current.play().then(() => timeline.current.reverse());
-    // Call the onClick prop if provided
     if (onClick) {
       onClick();
     }
-  };
+  });
 
   return (
     <button ref={buttonRef} onClick={handleClick} className={className}>

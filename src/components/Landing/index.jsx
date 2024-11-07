@@ -1,61 +1,67 @@
 // src/components/Landing/index.jsx
+// src/components/Landing/index.jsx
 
 'use client';
 
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import styles from './style.module.scss';
-import { useRef } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import useGSAP from '../../hooks/useLocoScroll';
+import { useGSAP } from '@gsap/react';
 
 import { slideUp } from './animation';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function Landing() {
   const firstTextRef = useRef(null);
   const secondTextRef = useRef(null);
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
-  let xPercent = 0;
-  let direction = -1;
+
+  const xPercent = useRef(0);
+  const direction = useRef(-1);
+
+  // Register ScrollTrigger plugin inside useEffect
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
 
   // Initialize GSAP animations using the useGSAP hook
-  useGSAP(() => {
-    // ScrollTrigger animation for the slider
-    gsap.to(sliderRef.current, {
-      scrollTrigger: {
-        trigger: document.documentElement,
-        scrub: 0.25,
-        start: 'top top',
-        end: '+=100%',
-        onUpdate: (self) => {
-          direction = self.direction * -1;
+  useGSAP(
+    (context, contextSafe) => {
+      // ScrollTrigger animation for the slider
+      gsap.to(sliderRef.current, {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          scrub: 0.25,
+          start: 'top top',
+          end: '+=100%',
+          onUpdate: (self) => {
+            direction.current = self.direction * -1;
+          },
         },
-      },
-      x: '-500px',
-      ease: 'none',
-    });
+        x: '-500px',
+        ease: 'none',
+      });
 
-    // Animation loop using requestAnimationFrame
-    const animate = () => {
-      if (xPercent < -100) {
-        xPercent = 0;
-      } else if (xPercent > 0) {
-        xPercent = -100;
-      }
-      gsap.set(firstTextRef.current, { xPercent: xPercent });
-      gsap.set(secondTextRef.current, { xPercent: xPercent });
-      xPercent += 0.1 * direction;
-      requestAnimationFrame(animate);
-    };
+      // Animation loop using requestAnimationFrame
+      const animate = contextSafe(() => {
+        if (xPercent.current < -100) {
+          xPercent.current = 0;
+        } else if (xPercent.current > 0) {
+          xPercent.current = -100;
+        }
+        gsap.set(firstTextRef.current, { xPercent: xPercent.current });
+        gsap.set(secondTextRef.current, { xPercent: xPercent.current });
+        xPercent.current += 0.1 * direction.current;
+        requestAnimationFrame(animate);
+      });
 
-    animate();
-  }, [direction]);
+      animate();
+    },
+    { scope: containerRef }
+  );
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

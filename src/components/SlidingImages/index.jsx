@@ -1,22 +1,17 @@
-// src/components/SlidingImages/index.jsx
+//src/components/SlidingImages/index.jsx
 
 'use client'; // Ensure this is the first line to mark the component as a Client Component
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import styles from './style.module.scss';
 import Image from 'next/image';
 
-import { gsap } from 'gsap'; // Import GSAP
-import useGSAP from '../../hooks/useLocoScroll';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'; // Import ScrollTrigger plugin
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-import { slideUp } from './animation'; // Import slideUp variant
-
-// Register ScrollTrigger globally
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { slideUp } from './animation';
 
 const slider1 = [
   { color: '#e3e5e7', src: 'c2.jpg' },
@@ -45,9 +40,14 @@ export default function SlidingImages() {
   const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
   const height = useTransform(scrollYProgress, [0, 0.9], [50, 0]);
 
+  // Register ScrollTrigger plugin inside useEffect
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
+
   // Initialize GSAP animations using the useGSAP hook
   useGSAP(
-    () => {
+    (context, contextSafe) => {
       // Example GSAP animation: Fade in projects on scroll
       gsap.fromTo(
         '.project',
@@ -64,27 +64,26 @@ export default function SlidingImages() {
         }
       );
 
-      // Animation loop using requestAnimationFrame (if needed)
-      let xPercent = 0;
-      let direction = -1;
+      // Animation loop using requestAnimationFrame
+      const xPercent = { current: 0 };
+      const direction = { current: -1 };
 
-      const animate = () => {
-        if (xPercent < -100) {
-          xPercent = 0;
-        } else if (xPercent > 0) {
-          xPercent = -100;
+      const animate = contextSafe(() => {
+        if (xPercent.current < -100) {
+          xPercent.current = 0;
+        } else if (xPercent.current > 0) {
+          xPercent.current = -100;
         }
-        gsap.set(slider1Ref.current, { xPercent: xPercent });
-        gsap.set(slider2Ref.current, { xPercent: xPercent });
-        xPercent += 0.1 * direction;
+        gsap.set(slider1Ref.current, { xPercent: xPercent.current });
+        gsap.set(slider2Ref.current, { xPercent: xPercent.current });
+        xPercent.current += 0.1 * direction.current;
         requestAnimationFrame(animate);
-      };
+      });
 
       animate();
     },
-    [],
-    containerRef.current
-  ); // Pass containerRef.current as the scope
+    { scope: containerRef }
+  ); // Define the scope for selector text
 
   return (
     <motion.main
@@ -105,7 +104,7 @@ export default function SlidingImages() {
           {slider1.map((project, index) => (
             <div
               key={index}
-              className={styles.project}
+              className="project" // Use className="project" for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -113,7 +112,7 @@ export default function SlidingImages() {
                   fill={true}
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
-                  priority={false} // Adjust based on your optimization strategy
+                  priority={false}
                 />
               </div>
             </div>
@@ -127,7 +126,7 @@ export default function SlidingImages() {
           {slider2.map((project, index) => (
             <div
               key={index}
-              className={styles.project}
+              className="project" // Use className="project" for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -135,7 +134,7 @@ export default function SlidingImages() {
                   fill={true}
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
-                  priority={false} // Adjust based on your optimization strategy
+                  priority={false}
                 />
               </div>
             </div>

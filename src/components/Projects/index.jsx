@@ -148,12 +148,12 @@ export default function Home() {
                   style={{ backgroundColor: color }}
                   key={`modal_${index}`}
                 >
-                  <Image
+                  {/* <Image
                     src={`/images/${src}`}
                     width={300}
                     height={200}
                     alt="image"
-                  />
+                  /> */}
                 </div>
               );
             })}

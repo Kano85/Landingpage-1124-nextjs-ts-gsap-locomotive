@@ -77,13 +77,13 @@ export default function Landing() {
       className={styles.landing}
       ref={containerRef}
     >
-      <Image
+      {/* <Image
         src="/images/background.jpg"
         fill={true}
         alt="background"
         priority
         sizes="100vw"
-      />
+      /> */}
       <div className={styles.sliderContainer}>
         <div ref={sliderRef} className={styles.slider}>
           <p ref={firstTextRef}>Freelance Developer -</p>

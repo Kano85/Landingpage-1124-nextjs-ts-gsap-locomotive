@@ -1,15 +1,15 @@
-'use client';
+'use client'; // Ensure this is the first line to mark the component as a Client Component
 
 import React, { useRef } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import styles from './style.module.scss';
 import Image from 'next/image';
 
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { gsap } from 'gsap'; // Import GSAP
+import { useGSAP } from '@gsap/react'; // Updated import
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'; // Import ScrollTrigger plugin
 
-import { slideUp } from './animation';
+import { slideUp } from './animation'; // Import slideUp variant
 
 // Register ScrollTrigger plugin at the top level
 gsap.registerPlugin(ScrollTrigger);
@@ -61,25 +61,25 @@ export default function SlidingImages() {
       );
 
       // Animation loop using requestAnimationFrame
-      const xPercent = { current: 0 };
-      const direction = { current: -1 };
+      let xPercent = 0;
+      let direction = -1;
 
       const animate = contextSafe(() => {
-        if (xPercent.current < -100) {
-          xPercent.current = 0;
-        } else if (xPercent.current > 0) {
-          xPercent.current = -100;
+        if (xPercent < -100) {
+          xPercent = 0;
+        } else if (xPercent > 0) {
+          xPercent = -100;
         }
-        gsap.set(slider1Ref.current, { xPercent: xPercent.current });
-        gsap.set(slider2Ref.current, { xPercent: xPercent.current });
-        xPercent.current += 0.1 * direction.current;
+        gsap.set(slider1Ref.current, { xPercent: xPercent });
+        gsap.set(slider2Ref.current, { xPercent: xPercent });
+        xPercent += 0.1 * direction;
         requestAnimationFrame(animate);
       });
 
       animate();
     },
     { scope: containerRef }
-  );
+  ); // Define the scope for selector text
 
   return (
     <motion.main
@@ -90,13 +90,7 @@ export default function SlidingImages() {
       className={styles.landing}
       ref={containerRef}
     >
-      <Image
-        src="/images/background.jpg"
-        fill={true}
-        alt="background"
-        priority
-        sizes="100vw"
-      />
+      <Image src="/images/background.jpg" fill={true} alt="background" />
       <div className={styles.sliderContainer}>
         <motion.div
           style={{ x: x1 }}
@@ -106,7 +100,7 @@ export default function SlidingImages() {
           {slider1.map((project, index) => (
             <div
               key={index}
-              className="project"
+              className="project" // Use className="project" for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -115,7 +109,6 @@ export default function SlidingImages() {
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
                   priority={false}
-                  sizes="100vw"
                 />
               </div>
             </div>
@@ -129,7 +122,7 @@ export default function SlidingImages() {
           {slider2.map((project, index) => (
             <div
               key={index}
-              className="project"
+              className="project" // Use className="project" for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -138,7 +131,6 @@ export default function SlidingImages() {
                   alt={`Project ${index + 1}`}
                   src={`/images/${project.src}`}
                   priority={false}
-                  sizes="100vw"
                 />
               </div>
             </div>

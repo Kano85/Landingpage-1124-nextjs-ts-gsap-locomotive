@@ -10,10 +10,7 @@ import Nav from './nav';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import Rounded from '../../common/RoundedButton';
-import Magnetic from '../../common/Magnetic';
-import { useGSAP } from '@gsap/react';
 
-// Register ScrollTrigger plugin at the top level
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Header() {
@@ -22,32 +19,28 @@ export default function Header() {
   const [isActive, setIsActive] = useState(false);
   const pathname = usePathname();
 
-  // Close the navigation menu when the pathname changes
   useEffect(() => {
     if (isActive) setIsActive(false);
   }, [pathname, isActive]);
 
-  const { contextSafe } = useGSAP({ scope: headerRef });
-
-  // Initialize GSAP animations using the useGSAP hook
-  useGSAP(
-    (context, contextSafe) => {
-      const handleLeave = contextSafe(() => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleLeave = () => {
         gsap.to(buttonRef.current, {
           scale: 1,
           duration: 0.25,
           ease: 'power1.out',
         });
-      });
+      };
 
-      const handleEnterBack = contextSafe(() => {
+      const handleEnterBack = () => {
         gsap.to(buttonRef.current, {
           scale: 0,
           duration: 0.25,
           ease: 'power1.out',
         });
         setIsActive(false);
-      });
+      };
 
       gsap.to(buttonRef.current, {
         scrollTrigger: {
@@ -59,14 +52,12 @@ export default function Header() {
           onEnterBack: handleEnterBack,
         },
       });
-    },
-    { scope: headerRef }
-  );
+    }
+  }, []);
 
-  // Toggle function for the navigation menu
-  const toggleNav = contextSafe(() => {
+  const toggleNav = () => {
     setIsActive((prev) => !prev);
-  });
+  };
 
   return (
     <>

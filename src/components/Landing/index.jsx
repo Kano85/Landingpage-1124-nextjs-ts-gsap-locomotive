@@ -2,17 +2,14 @@
 
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './style.module.scss';
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-
 import { slideUp } from './animation';
 
-// Register ScrollTrigger plugin at the top level
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Landing() {
@@ -21,12 +18,11 @@ export default function Landing() {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
 
-  const xPercent = useRef(0);
-  const direction = useRef(-1);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      let xPercent = 0;
+      let direction = -1;
 
-  // Initialize GSAP animations using the useGSAP hook
-  useGSAP(
-    (context, contextSafe) => {
       // ScrollTrigger animation for the slider
       gsap.to(sliderRef.current, {
         scrollTrigger: {
@@ -35,7 +31,7 @@ export default function Landing() {
           start: 'top top',
           end: '+=100%',
           onUpdate: (self) => {
-            direction.current = self.direction * -1;
+            direction = self.direction * -1;
           },
         },
         x: '-500px',
@@ -43,31 +39,21 @@ export default function Landing() {
       });
 
       // Animation loop using requestAnimationFrame
-      const animate = contextSafe(() => {
-        if (xPercent.current < -100) {
-          xPercent.current = 0;
-        } else if (xPercent.current > 0) {
-          xPercent.current = -100;
+      const animate = () => {
+        if (xPercent < -100) {
+          xPercent = 0;
+        } else if (xPercent > 0) {
+          xPercent = -100;
         }
-        gsap.set(firstTextRef.current, { xPercent: xPercent.current });
-        gsap.set(secondTextRef.current, { xPercent: xPercent.current });
-        xPercent.current += 0.1 * direction.current;
+        gsap.set(firstTextRef.current, { xPercent: xPercent });
+        gsap.set(secondTextRef.current, { xPercent: xPercent });
+        xPercent += 0.1 * direction;
         requestAnimationFrame(animate);
-      });
+      };
 
       animate();
-    },
-    { scope: containerRef }
-  );
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const height = useTransform(scrollYProgress, [0, 0.9], [50, 0]);
+    }
+  }, []);
 
   return (
     <motion.main
@@ -77,13 +63,13 @@ export default function Landing() {
       className={styles.landing}
       ref={containerRef}
     >
-      {/* <Image
+      <Image
         src="/images/background.jpg"
         fill={true}
         alt="background"
         priority
         sizes="100vw"
-      /> */}
+      />
       <div className={styles.sliderContainer}>
         <div ref={sliderRef} className={styles.slider}>
           <p ref={firstTextRef}>Freelance Developer -</p>

@@ -1,17 +1,15 @@
-'use client'; // Ensure this is the first line to mark the component as a Client Component
+// src/components/SlidingImages/index.jsx
 
-import React, { useRef } from 'react';
+'use client';
+
+import React, { useRef, useEffect } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import styles from './style.module.scss';
 import Image from 'next/image';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { slideUp } from './animation';
 
-import { gsap } from 'gsap'; // Import GSAP
-import { useGSAP } from '@gsap/react'; // Updated import
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'; // Import ScrollTrigger plugin
-
-import { slideUp } from './animation'; // Import slideUp variant
-
-// Register ScrollTrigger plugin at the top level
 gsap.registerPlugin(ScrollTrigger);
 
 const slider1 = [
@@ -32,19 +30,10 @@ export default function SlidingImages() {
   const containerRef = useRef(null);
   const slider1Ref = useRef(null);
   const slider2Ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
 
-  const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const height = useTransform(scrollYProgress, [0, 0.9], [50, 0]);
-
-  // Initialize GSAP animations using the useGSAP hook
-  useGSAP(
-    (context, contextSafe) => {
-      // Example GSAP animation: Fade in projects on scroll
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Initialize GSAP animations
       gsap.fromTo(
         '.project',
         { opacity: 0, y: 50 },
@@ -60,11 +49,10 @@ export default function SlidingImages() {
         }
       );
 
-      // Animation loop using requestAnimationFrame
       let xPercent = 0;
       let direction = -1;
 
-      const animate = contextSafe(() => {
+      const animate = () => {
         if (xPercent < -100) {
           xPercent = 0;
         } else if (xPercent > 0) {
@@ -74,12 +62,11 @@ export default function SlidingImages() {
         gsap.set(slider2Ref.current, { xPercent: xPercent });
         xPercent += 0.1 * direction;
         requestAnimationFrame(animate);
-      });
+      };
 
       animate();
-    },
-    { scope: containerRef }
-  ); // Define the scope for selector text
+    }
+  }, []);
 
   return (
     <motion.main
@@ -93,7 +80,7 @@ export default function SlidingImages() {
       <Image src="/images/background.jpg" fill={true} alt="background" />
       <div className={styles.sliderContainer}>
         <motion.div
-          style={{ x: x1 }}
+          // style={{ x: x1 }}
           className={styles.slider}
           ref={slider1Ref}
         >
@@ -115,7 +102,7 @@ export default function SlidingImages() {
           ))}
         </motion.div>
         <motion.div
-          style={{ x: x2 }}
+          // style={{ x: x2 }}
           className={styles.slider}
           ref={slider2Ref}
         >

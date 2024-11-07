@@ -18,28 +18,39 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      const LocomotiveScroll = (await import('locomotive-scroll')).default;
-      const locomotiveScroll = new LocomotiveScroll();
+    document.body.style.cursor = 'default';
+    window.scrollTo(0, 0);
 
-      setTimeout(() => {
-        setIsLoading(false);
-        document.body.style.cursor = 'default';
-        window.scrollTo(0, 0);
-      }, 2000);
-    })();
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      (async () => {
+        const LocomotiveScroll = (await import('locomotive-scroll')).default;
+        const locomotiveScroll = new LocomotiveScroll();
+      })();
+    }
+  }, [isLoading]);
 
   return (
     <main className={styles.main}>
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
-      <Landing />
-      <Description />
-      <Projects />
-      <SlidingImages />
-      <Contact />
+      {!isLoading && (
+        <>
+          <Landing />
+          <Description />
+          <Projects />
+          <SlidingImages />
+          <Contact />
+        </>
+      )}
     </main>
   );
 }

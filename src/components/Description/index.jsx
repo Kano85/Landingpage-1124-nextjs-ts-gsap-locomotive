@@ -1,8 +1,8 @@
 // src/components/Description/index.jsx
 
 import styles from './style.module.scss';
-import { useInView, motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { slideUp, opacity } from './animation';
 import Rounded from '../../common/RoundedButton';
 
@@ -10,7 +10,26 @@ export default function Description() {
   const phrase =
     'Helping brands to stand out in the digital era. Together we will set the new status quo. No nonsense, always on the cutting edge.';
   const descriptionRef = useRef(null);
-  const isInView = useInView(descriptionRef);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (descriptionRef.current) {
+      observer.observe(descriptionRef.current);
+    }
+
+    return () => {
+      if (descriptionRef.current) {
+        observer.unobserve(descriptionRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div ref={descriptionRef} className={styles.description}>
@@ -21,15 +40,19 @@ export default function Description() {
               <motion.span
                 variants={slideUp}
                 custom={index}
+                initial="closed"
                 animate={isInView ? 'open' : 'closed'}
-                key={index}
               >
                 {word}
               </motion.span>
             </span>
           ))}
         </p>
-        <motion.p variants={opacity} animate={isInView ? 'open' : 'closed'}>
+        <motion.p
+          variants={opacity}
+          initial="closed"
+          animate={isInView ? 'open' : 'closed'}
+        >
           The combination of my passion for design, code & interaction positions
           me in a unique place in the web design world.
         </motion.p>

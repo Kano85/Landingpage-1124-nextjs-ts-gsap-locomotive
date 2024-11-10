@@ -1,14 +1,19 @@
-'use client';
+// src/common/Magnetic/index.jsx
+
+'use client'; // Add this line
 
 import React, { useRef } from 'react';
-import { gsap } from 'gsap';
+import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 export default function Magnetic({ children }) {
   const magneticRef = useRef(null);
 
   useGSAP(
-    (context, contextSafe) => {
+    () => {
+      if (!magneticRef.current) return; // Ensure ref is attached
+
+      // Create GSAP quickTo instances for x and y
       const xTo = gsap.quickTo(magneticRef.current, 'x', {
         duration: 1,
         ease: 'elastic.out(1, 0.3)',
@@ -18,8 +23,8 @@ export default function Magnetic({ children }) {
         ease: 'elastic.out(1, 0.3)',
       });
 
-      // Wrap event handlers with contextSafe()
-      const handleMouseMove = contextSafe((e) => {
+      // Event handler for mouse movement
+      const handleMouseMove = (e) => {
         const { clientX, clientY } = e;
         const { height, width, left, top } =
           magneticRef.current.getBoundingClientRect();
@@ -27,24 +32,26 @@ export default function Magnetic({ children }) {
         const y = clientY - (top + height / 2);
         xTo(x * 0.35);
         yTo(y * 0.35);
-      });
+      };
 
-      const handleMouseLeave = contextSafe(() => {
+      // Event handler for mouse leave
+      const handleMouseLeave = () => {
         xTo(0);
         yTo(0);
-      });
+      };
 
+      // Attach event listeners
       magneticRef.current.addEventListener('mousemove', handleMouseMove);
       magneticRef.current.addEventListener('mouseleave', handleMouseLeave);
 
-      // Cleanup event listeners
+      // Cleanup function to remove event listeners
       return () => {
         magneticRef.current.removeEventListener('mousemove', handleMouseMove);
         magneticRef.current.removeEventListener('mouseleave', handleMouseLeave);
       };
     },
     { scope: magneticRef }
-  );
+  ); // Set scope to the ref for context management
 
   return React.cloneElement(children, { ref: magneticRef });
 }

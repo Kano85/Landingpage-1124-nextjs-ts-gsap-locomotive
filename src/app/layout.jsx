@@ -1,4 +1,4 @@
-// app/layout.js
+//app/layout.jsx
 
 import './globals.css';
 import { Inter } from 'next/font/google';

@@ -1,9 +1,7 @@
-// src/components/SlidingImages/index.jsx
-
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import styles from './style.module.scss';
 import Image from 'next/image';
 import { gsap } from 'gsap';
@@ -33,7 +31,7 @@ export default function SlidingImages() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Initialize GSAP animations
+      // Initialize GSAP animations for projects
       gsap.fromTo(
         '.project',
         { opacity: 0, y: 50 },
@@ -79,15 +77,12 @@ export default function SlidingImages() {
     >
       <Image src="/images/background.jpg" fill={true} alt="background" />
       <div className={styles.sliderContainer}>
-        <motion.div
-          // style={{ x: x1 }}
-          className={styles.slider}
-          ref={slider1Ref}
-        >
+        {/* Removed style={{ x: x1 }} as x1 is undefined */}
+        <motion.div className={styles.slider} ref={slider1Ref}>
           {slider1.map((project, index) => (
             <div
               key={index}
-              className="project" // Use className="project" for GSAP selector
+              className="project" // Used for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -101,15 +96,13 @@ export default function SlidingImages() {
             </div>
           ))}
         </motion.div>
-        <motion.div
-          // style={{ x: x2 }}
-          className={styles.slider}
-          ref={slider2Ref}
-        >
+
+        {/* Removed style={{ x: x2 }} as x2 is undefined */}
+        <motion.div className={styles.slider} ref={slider2Ref}>
           {slider2.map((project, index) => (
             <div
               key={index}
-              className="project" // Use className="project" for GSAP selector
+              className="project" // Used for GSAP selector
               style={{ backgroundColor: project.color }}
             >
               <div className={styles.imageContainer}>
@@ -123,7 +116,9 @@ export default function SlidingImages() {
             </div>
           ))}
         </motion.div>
-        <motion.div style={{ height }} className={styles.circleContainer}>
+
+        {/* Removed style={{ height }} as height is undefined */}
+        <motion.div className={styles.circleContainer}>
           <div className={styles.circle}></div>
         </motion.div>
       </div>

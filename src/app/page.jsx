@@ -1,18 +1,18 @@
-//app/page.jsx;
+// app/page.jsx
 
 'use client';
 
 import styles from './page.module.scss';
 
 import { useEffect, useState } from 'react';
-// import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
-// import Preloader from '../components/Preloader';
+import Preloader from '../components/Preloader';
 import Landing from '../components/Landing';
 import Projects from '../components/Projects';
 import Description from '../components/Description';
-// import SlidingImages from '../components/SlidingImages';
-// import Contact from '../components/Contact';
+import SlidingImages from '../components/SlidingImages';
+import Contact from '../components/Contact';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,16 +32,16 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      {/* <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
-      </AnimatePresence> */}
+      </AnimatePresence>
       {!isLoading && (
         <>
           <Landing />
           <Description />
           <Projects />
-          {/* <SlidingImages /> */}
-          {/* <Contact /> */}
+          <SlidingImages />
+          <Contact />
         </>
       )}
     </main>

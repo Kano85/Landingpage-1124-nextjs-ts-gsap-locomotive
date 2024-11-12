@@ -3,7 +3,6 @@ import { useInView, motion } from 'framer-motion';
 import { useRef } from 'react';
 import { slideUp, opacity } from './animation';
 import Rounded from '../../common/RoundedButton';
-import Script from 'next/script';
 
 export default function Index() {
   const phrase =

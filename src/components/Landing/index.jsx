@@ -1,5 +1,3 @@
-//src/components/Landing/index.jsx
-
 'use client';
 
 import Image from 'next/image';
@@ -7,10 +5,9 @@ import styles from './style.module.scss';
 import { useRef, useLayoutEffect, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { slideUp } from './animation';
 import { motion } from 'framer-motion';
-
 import { useMediaQuery } from 'react-responsive';
+import { slideUp } from './animation';
 
 export default function Home() {
   const firstText = useRef(null);
@@ -18,6 +15,13 @@ export default function Home() {
   const slider = useRef(null);
   let xPercent = 0;
   let direction = -1;
+
+  useEffect(() => {
+    console.log(
+      '%c✨ Design + Developed By Akilesh • https://www.akilesh.in',
+      'font-weight: bold; font-size: 16px;color: #00b894'
+    );
+  }, []);
 
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   useLayoutEffect(() => {
@@ -45,7 +49,7 @@ export default function Home() {
     gsap.set(firstText.current, { xPercent: xPercent });
     gsap.set(secondText.current, { xPercent: xPercent });
     requestAnimationFrame(animate);
-    xPercent += 0.08 * direction;
+    xPercent += 0.1 * direction;
   };
 
   return (
@@ -56,14 +60,14 @@ export default function Home() {
       className={styles.landing}
     >
       {isMobile ? (
-        <Image src="/images/smolnit.jpg" fill={true} alt="background" />
+        <Image src="/images/smolnit.png" fill={true} alt="background" />
       ) : (
         <Image src="/images/nit.jpg" fill={true} alt="background" />
       )}
       <div className={styles.sliderContainer}>
         <div ref={slider} className={styles.slider}>
-          <p ref={firstText}>Harold Cano Harold Cano</p>
-          <p ref={secondText}>Harold Cano Harold Cano</p>
+          <p ref={firstText}>Freelance Developer -</p>
+          <p ref={secondText}>Freelance Developer -</p>
         </div>
       </div>
       <div

@@ -1,13 +1,13 @@
-// src/components/Contact/index.jsx
+//src/components/Contact/index.jsx
 
 import styles from './style.module.scss';
 import Image from 'next/image';
 import Rounded from '../../common/RoundedButton';
 import { useRef } from 'react';
-import { useScroll, motion, useTransform } from 'framer-motion';
+import { useScroll, motion, useTransform, useSpring } from 'framer-motion';
 import Magnetic from '../../common/Magnetic';
 
-export default function Contact() {
+export default function Index() {
   const container = useRef(null);
   const { scrollYProgress } = useScroll({
     target: container,
@@ -16,24 +16,19 @@ export default function Contact() {
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const y = useTransform(scrollYProgress, [0, 1], [-500, 0]);
   const rotate = useTransform(scrollYProgress, [0, 1], [120, 90]);
-
   return (
     <motion.div style={{ y }} ref={container} className={styles.contact}>
       <div className={styles.body}>
         <div className={styles.title}>
           <span>
             <div className={styles.imageContainer}>
-              <Image
-                fill={true}
-                alt={'image'}
-                src={`/images/background.jpg`}
-                priority={true}
-                sizes="100vw" // Optional: Improve loading performance
-              />
+              <Image fill={true} alt={'image'} src={`/images/van.png`} />
             </div>
-            <h2>Let&apos;s work</h2>
+            <div>
+              <h2>Let&apos;s work</h2>
+              <h2>together</h2>
+            </div>
           </span>
-          <h2>together</h2>
           <motion.div style={{ x }} className={styles.buttonContainer}>
             <Rounded backgroundColor={'#334BD3'} className={styles.button}>
               <p>Get in touch</p>
@@ -55,38 +50,44 @@ export default function Contact() {
         </div>
         <div className={styles.nav}>
           <Rounded>
-            <p>info@dennissnellenberg.com</p>
+            <p href="mailto:hello@akictech.in">hello@akictech.in</p>
           </Rounded>
           <Rounded>
-            <p>+31 6 27 84 74 30</p>
+            <p>+91 73730 14114</p>
           </Rounded>
         </div>
+      </div>
+      <div className={styles.body} id="contact-me">
         <div className={styles.info}>
           <div>
             <span>
               <h3>Version</h3>
-              <p>2022 © Edition</p>
-            </span>
-            <span>
-              <h3>Time</h3>
-              <p>11:49 PM GMT+2</p>
+              <p>2024 © ACT</p>
             </span>
           </div>
           <div>
             <span>
-              <h3>Socials</h3>
+              <h3>socials</h3>
               <Magnetic>
-                <p>Awwwards</p>
+                <div href="https://app.lamento.in" target="_blank">
+                  <p>Blog</p>
+                </div>
               </Magnetic>
             </span>
             <Magnetic>
-              <p>Instagram</p>
+              <div href="https://www.instagram.com/akilesh_io" target="_blank">
+                <p>Instagram</p>
+              </div>
             </Magnetic>
             <Magnetic>
-              <p>Dribbble</p>
+              <div href="https://dribbble.com/Akilesh_io" target="_blank">
+                <p>Dribbble</p>
+              </div>
             </Magnetic>
             <Magnetic>
-              <p>Linkedin</p>
+              <div href="https://twitter.com/akilesh_io" target="_blank">
+                <p>Twitter</p>
+              </div>
             </Magnetic>
           </div>
         </div>

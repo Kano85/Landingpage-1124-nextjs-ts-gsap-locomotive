@@ -1,3 +1,5 @@
+
+
 # Node modules
 node_modules/
 
@@ -60,6 +62,7 @@ locomotive-scroll/build/
 gsap/*.map
 gsap/cache/
 gsap/temp/
+.npmrc
 
 # Ignore lock files
 package-lock.json

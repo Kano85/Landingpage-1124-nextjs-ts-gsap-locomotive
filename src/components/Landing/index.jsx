@@ -1,3 +1,5 @@
+//src/components/Landing/index.jsx
+
 'use client';
 
 import Image from 'next/image';

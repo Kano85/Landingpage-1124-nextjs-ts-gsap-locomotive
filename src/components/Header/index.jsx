@@ -1,4 +1,7 @@
+//src/components/Header/index.jsx
+
 'use client';
+
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './style.module.scss';
 import { usePathname } from 'next/navigation';
